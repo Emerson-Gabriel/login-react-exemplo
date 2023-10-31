@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 /* type determina qual o tipo que terá aqui dentro do context */
 export type AuthContextType = {
     user: User | null; /* se não tiver usuario logado será null */
-    signin: (email: string, password: string) => Promise<boolean>;
+    signin: (email: string, password: string, device_name: string) => Promise<boolean>;
     signout: () => void;
 }
 

@@ -17,22 +17,30 @@ export const AuthProvider = ({ children } : {children: JSX.Element }) => {
             if (storageData) {
                 /* aqui ele valida se o Token é valido */
                 const data = await api.validateToken(storageData);
-                /* Por hora o validateToken nao existe */
-                if (data.user) {
-                    setUser(data.user);
-                } 
+                setUser(data.retuser);
+                
+                
+                /* if (data.user.name) {
+
+                } */
             }
         }
         validateToken();
     }, []);
 
-    const signin = async (email: string, password: string) => {
+    const signin = async (email: string, password: string, device_name: string) => {
         /* a requisição será feita aqui dentro */
         /* veja que aqui estamos usando os processos criados dentro do hook */
-        const data = await api.signin(email, password);
+        const data = await api.signin(email, password, device_name);
         /* usando o await devemos colocar a função como async */
-        if (data.user && data.token) {
-            setUser(data.user);
+        if (data.ok) {
+            setUser(data.retuser);
+            if (data.retuser != null) {
+                /* salvando o usuário no loclaStorage */
+                localStorage.setItem('user.id', data.retuser.id.toString());
+                localStorage.setItem('user.name', data.retuser.name);
+                localStorage.setItem('user.email', data.retuser.email);
+            }
             setToken(data.token);
             return true;
         }
